@@ -20,6 +20,7 @@
             </div>
         @endif
         <div class="row">
+
             <div class="col-md-12">
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Filter:</label>
@@ -97,6 +98,7 @@
                     searchable: false
                 }]
             });
+            
             $('#level_id').on('change', function() {
                 dataUser.ajax.reload();
             });
