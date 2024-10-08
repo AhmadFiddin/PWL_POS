@@ -6,6 +6,7 @@ use App\Models\LevelModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -39,7 +40,7 @@ class UserController extends Controller
         if ($request->level_id) {
             $users->where('level_id', $request->level_id);
         }
-        
+
         return DataTables::of($users)
             // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
             ->addIndexColumn()
@@ -77,8 +78,9 @@ class UserController extends Controller
 
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
     }
- 
-    public function create() {
+
+    public function create()
+    {
         $breadcrumb = (object) [
             'title' => 'Tambah User',
             'list' => ['Home', 'User', 'Tambah']
@@ -139,7 +141,7 @@ class UserController extends Controller
         $request->validate([
             // username harus diisi, berupa string, minimal 3 karakter, 
             // dan bernilai unik di tabel m_user kolom username kecuali untuk user dengan id yang sedang diedit
-            'username' => 'required|string|min:3|unique:m_user,username,'.$id.',user_id',
+            'username' => 'required|string|min:3|unique:m_user,username,' . $id . ',user_id',
             'nama'     => 'required|string|max:100',  // nama harus diisi, berupa string, dan maksimal 100 karakter
             'password' => 'nullable|min:5',           // password bisa diisi (minimal 5 karakter) dan bisa tidak diisi
             'level_id' => 'required|integer'          // level_id harus diisi dan berupa angka
@@ -171,5 +173,46 @@ class UserController extends Controller
             // Jika terjadi error ketika menghapus data, redirect kembali ke halaman dengan membawa pesan error
             return redirect('/user')->with('error', 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
+    }
+
+    // Menambahkan fungsi create_ajax
+    public function create_ajax()
+    {
+        $level = LevelModel::select('level_id', 'level_nama')->get();
+        return view('user.create_ajax')->with('level', $level);
+    }
+
+    // Tambahkan fungsi store_ajax untuk penyimpanan data melalui AJAX
+    public function store_ajax(Request $request)
+    {
+        // cek apakah request berupa ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            // Definisikan aturan validasi
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|string|min:3|unique:m_user,username',
+                'nama'     => 'required|string|max:100',
+                'password' => 'required|min:6',
+            ];
+            // use illuminate\Support\Facades\Validator
+            $validator = Validator::make($request->all(), $rules);
+            // Jika validasi gagal, kembalikan pesan error dalam format JSON
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false, // status gagal
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(), // pesan error validasi
+                ]);
+            }
+            // Simpan data user ke dalam database
+            UserModel::create($request->all());
+            // Jika berhasil, kembalikan response sukses dalam format JSON
+            return response()->json([
+                'status' => true,
+                'message' => 'Data user berhasil disimpan'
+            ]);
+        }
+        // Jika bukan request ajax, redirect ke halaman utama
+        redirect('/');
     }
 }
