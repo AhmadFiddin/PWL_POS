@@ -8,15 +8,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LevelModel extends Model
 {
-    use HasFactory;
+    // Menentukan nama tabel yang terkait dengan model ini (opsional jika nama tabel mengikuti konvensi)
+    protected $table = 'm_level'; // Ganti dengan nama tabel yang sesuai
 
-    protected $table = 'm_level';    
+    // Menentukan primary key jika bukan 'id'
     protected $primaryKey = 'level_id';
-    
-    protected $fillable = ['level_id', 'level_kode', 'level_nama'];
 
-    public function user():BelongsTo
+    // Menentukan atribut yang dapat diisi (mass assignable)
+    protected $fillable = ['level_kode', 'level_nama']; // Ganti dengan kolom yang sesuai
+
+    // Hubungan dengan model lain (jika ada)
+    public function users()
     {
-        return $this->belongsTo(UserModel::class);
+        return $this->hasMany(UserModel::class, 'level_id', 'level_id');
     }
+
+    // Tambahkan metode atau logika lain yang diperlukan untuk model ini
 }
