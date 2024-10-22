@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function()
         Route::delete('/{id}', [UserController::class, 'destroy']); // menghapus data user
     });
     
-    Route::group(['prefix' => 'level'], function () {
+    Route::group(['prefix' => 'level', 'middleware'=>['authorize:ADM']], function () {
         Route::get('/', [LevelController::class, 'index']); // menampilkan halaman awal level
         Route::post('/list', [LevelController::class, 'list']); // menampilkan data level dalam bentuk json untuk datatables
         Route::get('/create', [LevelController::class, 'create']); // menampilkan halaman form tambah level
@@ -57,7 +57,7 @@ Route::middleware(['auth'])->group(function()
         Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
     });
     
-    Route::group(['prefix' => 'kategori'], function () {
+    Route::group(['prefix' => 'kategori', 'middleware'=>['authorize:ADM']], function () {
         Route::get('/', [KategoriController::class, 'index']); // menampilkan halaman awal kategori
         Route::post('/list', [KategoriController::class, 'list']); // menampilkan data kategori dalam bentuk json untuk datatables
         Route::get('/create', [KategoriController::class, 'create']); // menampilkan halaman form tambah kategori
@@ -74,7 +74,7 @@ Route::middleware(['auth'])->group(function()
         Route::delete('/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
     });
     
-    Route::group(['prefix' => 'supplier'], function () {
+    Route::group(['prefix' => 'supplier', 'middleware'=>['authorize:ADM']], function () {
         Route::get('/', [SupplierController::class, 'index']); // menampilkan halaman awal supplier
         Route::post('/list', [SupplierController::class, 'list']); // menampilkan data supplier dalam bentuk json untuk datatables
         Route::get('/create', [SupplierController::class, 'create']); // menampilkan halaman form tambah supplier
@@ -91,7 +91,7 @@ Route::middleware(['auth'])->group(function()
         Route::delete('/{id}', [SupplierController::class, 'destroy']); // menghapus data supplier
     });
     
-    Route::group(['prefix' => 'barang'], function () {
+    Route::group(['prefix' => 'barang', 'middleware'=>['authorize:ADM,MNG']], function () {
         Route::get('/', [BarangController::class, 'index']); // menampilkan halaman awal barang
         Route::post('/list', [BarangController::class, 'list']); // menampilkan data barang dalam bentuk json untuk datatables
         Route::get('/create', [BarangController::class, 'create']); // menampilkan halaman form tambah barang
