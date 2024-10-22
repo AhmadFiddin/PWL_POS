@@ -7,6 +7,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,7 +23,7 @@ Route::middleware(['auth'])->group(function()
     // masukkan semua route yang perlu autentikasi di sini
     Route::get('/', [WelcomeController::class, 'index']);
 
-    Route::group(['prefix' => 'user'], function () {
+    Route::group(['prefix' => 'user', 'middleware'=>['authorize:ADM']], function () {
         Route::get('/', [UserController::class, 'index']); // menampilkan halaman awal user
         Route::post('/list', [UserController::class, 'list']); // menampilkan data user dalam bentuk json untuk datatables
         Route::get('/create', [UserController::class, 'create']); // menampilkan halaman form tambah user
@@ -105,5 +106,5 @@ Route::middleware(['auth'])->group(function()
         Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']); // untuk tampilkan form confirm delete barang Ajax
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // untuk hapus data barang Ajax 
         Route::delete('/{id}', [BarangController::class, 'destroy']); // menghapus data barang
-    }); 
+    });
 });
