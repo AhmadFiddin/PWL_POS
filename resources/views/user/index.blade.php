@@ -59,15 +59,14 @@ data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endpush
 @push('js')
     <script>
-        function modalAction(url = '') {
-        $('#myModal').load(url, function() {
-            $('#myModal').modal('show');
-            });
-        }
-
-        var dataUser;
+         function modalAction(url = ''){ 
+      $('#myModal').load(url,function(){ 
+          $('#myModal').modal('show'); 
+      }); 
+    } 
+    var dataUser;
         $(document).ready(function() {
-            dataUser = $('#table_user').DataTable({
+            dataUser = $('#table_user').DataTable({ 
                 // serverSide: true, jika ingin menggunakan server side processing
                 serverSide: true,
                 ajax: {
