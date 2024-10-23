@@ -43,8 +43,8 @@ class BarangController extends Controller
             ->with('kategori'); // memuat relasi kategori
         
         // Filter data barang berdasarkan kategori_id
-        if ($request->kategori_id) {
-            $barangs->where('kategori_id', $request->kategori_id);
+        if ($request->filter_kategori) {
+            $barangs->where('kategori_id', $request->filter_kategori);
         }
 
         // Return data untuk DataTables
@@ -133,6 +133,20 @@ class BarangController extends Controller
         return view('barang.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang, 'activeMenu' => $activeMenu]);
     }
 
+    public function show_ajax(string $id)
+    {
+        $barang = BarangModel::find($id);
+
+        if ($barang) {
+            return view('barang.show_ajax', ['barang' => $barang]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ]);
+        }
+    }
+    
     // Menampilkan halaman form edit barang
     public function edit(string $id)
     {

@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
         Selamat datang semua, ini adalah halaman utama dari aplikasi ini.
-        <canvas id="sales-chart" width="400" height="200"></canvas>
+        {{-- <canvas id="sales-chart" width="400" height="200"></canvas>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script>
                 const ctx = document.getElementById('sales-chart').getContext('2d');
@@ -33,7 +33,7 @@
                         }
                     }
                 });
-            </script>
+            </script> --}}
     </div>
 </div>
 @endsection
